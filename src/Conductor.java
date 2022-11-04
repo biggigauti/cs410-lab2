@@ -145,7 +145,7 @@ public class Conductor {
     }
 
     private static boolean validateSong(String filename) {
-        File file = new File("c:/temp/"+filename);
+        File file = new File(filename);
         boolean exists = file.exists();
 
         if (filename == null) {
