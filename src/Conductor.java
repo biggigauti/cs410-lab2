@@ -55,8 +55,8 @@ public class Conductor {
         List<BellNote> list = new ArrayList<BellNote>();
         String line = null;
 
-        //String[] correctNotes = new String[14];
-        String[] correctNotes = {"REST","A4","A4S","B4","C4","C4S","D4","D4S","E4","F4","F4S","G4","G4S","A5"};
+        //String[] correctNotes = new String[]{"REST","A4","A4S","B4","C4","C4S","D4","D4S","E4","F4","F4S","G4","G4S","A5"};
+        //String[] correctNotes = {"REST","A4","A4S","B4","C4","C4S","D4","D4S","E4","F4","F4S","G4","G4S","A5"};
         //String[] correctNoteLength = new int[4];
         String[] correctNoteLength = {"1","2","4","8"};
 
@@ -66,18 +66,50 @@ public class Conductor {
                 BellNote bn = new BellNote();
                 String[] split = line.split(" ");
 
-                for (int i = 0; i<correctNotes.length; i++) {
-                    if (split[0].toUpperCase() != correctNotes[i]) {
-                        System.err.println("Your file contained an invalid note.");
-                        System.exit(-1);
+                boolean validNote = false;
+
+                /*
+                for (int i = 0; i<correctNotes.length && !correct; i++) {
+                    if (split[0].toUpperCase().equals(correctNotes[i])) {
+                        correct = true;
+                    }
+                }
+                */
+
+                for (Note note : Note.values()) {
+                    if (note.name().toUpperCase().equals(split[0].toUpperCase())) {
+                        validNote = true;
+                        break;
                     }
                 }
 
+                if (!validNote) {
+                    System.err.println("Your file contained an invalid note.");
+                    System.exit(-1);
+                }
+
+                /*
                 for (int i = 0; i< correctNoteLength.length; i++) {
                     if (split[1] != correctNoteLength[i]) {
                         System.err.println("Your file contained an invalid note length.");
                         System.exit(-1);
                     }
+                }
+
+                 */
+
+                boolean validNoteLength = false;
+
+                for (int i = 0; i<correctNoteLength.length && !validNoteLength; i++) {
+                    if (split[1].equals(correctNoteLength[i])) {
+                        validNoteLength = true;
+                        break;
+                    }
+                }
+
+                if (!validNoteLength) {
+                    System.err.println("Your file contained an invalid note length.");
+                    System.exit(-1);
                 }
 
                 bn.note = parseNote(split[0]);
