@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,11 +55,30 @@ public class Conductor {
         List<BellNote> list = new ArrayList<BellNote>();
         String line = null;
 
+        //String[] correctNotes = new String[14];
+        String[] correctNotes = {"REST","A4","A4S","B4","C4","C4S","D4","D4S","E4","F4","F4S","G4","G4S","A5"};
+        //String[] correctNoteLength = new int[4];
+        String[] correctNoteLength = {"1","2","4","8"};
+
         try (FileReader fr = new FileReader(filename);
              BufferedReader br = new BufferedReader(fr);) {
             while((line = br.readLine()) != null) {
                 BellNote bn = new BellNote();
                 String[] split = line.split(" ");
+
+                for (int i = 0; i<correctNotes.length; i++) {
+                    if (split[0].toUpperCase() != correctNotes[i]) {
+                        System.err.println("Your file contained an invalid note.");
+                        System.exit(-1);
+                    }
+                }
+
+                for (int i = 0; i< correctNoteLength.length; i++) {
+                    if (split[1] != correctNoteLength[i]) {
+                        System.err.println("Your file contained an invalid note length.");
+                        System.exit(-1);
+                    }
+                }
 
                 bn.note = parseNote(split[0]);
                 bn.length = parseNoteLength(split[1]);
@@ -125,13 +145,18 @@ public class Conductor {
     }
 
     private static boolean validateSong(String filename) {
+        File file = new File("c:/temp/"+filename);
+        boolean exists = file.exists();
+
         if (filename == null) {
             System.err.println("Make sure you pass a song (.txt) as an argument and that the file exists.");
-            return false;
+            System.exit(-1);
         }
-        else {
-            return true;
+        else if (!exists) {
+            System.err.println("The filename you entered is invalid.");
+            System.exit(-1);
         }
+        return true;
     }
 
     public void getNextPlayer() {
