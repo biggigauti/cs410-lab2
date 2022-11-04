@@ -40,6 +40,9 @@ public class Conductor {
                 for (Player p : players) {
                     if (bn.note == p.getNote()) {
                         p.giveNoteLength(bn.length);
+                        System.out.println("Playing note "+bn.note);
+                        //Adding this break fixed the multiple notes running issue
+                        break;
                     }
                 }
             }
@@ -48,6 +51,7 @@ public class Conductor {
         } catch (LineUnavailableException e) {
             e.printStackTrace();
         }
+        System.exit(-1);
 
     }
 
@@ -55,9 +59,6 @@ public class Conductor {
         List<BellNote> list = new ArrayList<BellNote>();
         String line = null;
 
-        //String[] correctNotes = new String[]{"REST","A4","A4S","B4","C4","C4S","D4","D4S","E4","F4","F4S","G4","G4S","A5"};
-        //String[] correctNotes = {"REST","A4","A4S","B4","C4","C4S","D4","D4S","E4","F4","F4S","G4","G4S","A5"};
-        //String[] correctNoteLength = new int[4];
         String[] correctNoteLength = {"1","2","4","8"};
 
         try (FileReader fr = new FileReader(filename);
@@ -67,14 +68,6 @@ public class Conductor {
                 String[] split = line.split(" ");
 
                 boolean validNote = false;
-
-                /*
-                for (int i = 0; i<correctNotes.length && !correct; i++) {
-                    if (split[0].toUpperCase().equals(correctNotes[i])) {
-                        correct = true;
-                    }
-                }
-                */
 
                 for (Note note : Note.values()) {
                     if (note.name().toUpperCase().equals(split[0].toUpperCase())) {
@@ -87,16 +80,6 @@ public class Conductor {
                     System.err.println("Your file contained an invalid note.");
                     System.exit(-1);
                 }
-
-                /*
-                for (int i = 0; i< correctNoteLength.length; i++) {
-                    if (split[1] != correctNoteLength[i]) {
-                        System.err.println("Your file contained an invalid note length.");
-                        System.exit(-1);
-                    }
-                }
-
-                 */
 
                 boolean validNoteLength = false;
 
@@ -185,14 +168,10 @@ public class Conductor {
             System.exit(-1);
         }
         else if (!exists) {
-            System.err.println("The filename you entered is invalid.");
+            System.err.println("The filename: "+filename+" does not exist.");
             System.exit(-1);
         }
         return true;
-    }
-
-    public void getNextPlayer() {
-
     }
 
     public static List<Note> countNotes(String filename) {
