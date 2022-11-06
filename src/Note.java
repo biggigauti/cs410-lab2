@@ -1,3 +1,7 @@
+/**
+ * The Note class defines what a Note is and what shape notes can take through enumarations. The Note class takes
+ * care of the specific volume and frequency that makes each note.
+ */
 public enum Note {
     // REST Must be the first 'Note'
     REST,
@@ -16,6 +20,7 @@ public enum Note {
     A5,
     INVALID;
 
+    //Instance variables
     public static final int SAMPLE_RATE = 48 * 1024; // ~48KHz
     public static final int MEASURE_LENGTH_SEC = 1;
 
